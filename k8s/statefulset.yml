@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: fsl # has to match .spec.template.metadata.labels
+  serviceName: "fsl"
+  replicas: 3 # by default is 1
+  template:
+    metadata:
+      labels:
+        app: fsl # has to match .spec.selector.matchLabels
+    spec:
+      containers:
+      - name: fsl
+        image: veer30/task:fsl
+        ports:
+        - containerPort: 3000
