@@ -1,4 +1,4 @@
-name: CD deployments
+name: CD deployment
 on:
   push:
     branches: [ main ]
