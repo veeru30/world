@@ -1,0 +1,21 @@
+name: CD deployment
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to ec2 using ssh
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{secrets.EC2_PUBLIC_KEY}}
+          username: ubuntu
+          key: ${{secrets.EC2_SSH_KEY}}
+          script: |
+            echo "${{secrets.DOCKERHUB_TOKEN}}" | docker login "${{secrets.DOCKERHUB_USERNAME}}" --pasword-stdin
+            docker pull ${{secrets.DOCKERHUB_USERNAME}}/task:fsl
+            docker stop app || true
+            docker rm app || true
+            docker run -d --restart unless-stopped --name app -p 8080:3000 ${{secrets.DOCKERHUB_USERNAME}}/task:fsl
