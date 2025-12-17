@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         working-directory: water
-        run: npm Install
+        run: npm install
 
       - name: Run ESlint
         working-directory: water
